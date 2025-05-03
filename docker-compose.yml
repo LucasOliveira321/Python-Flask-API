@@ -1,0 +1,33 @@
+version: '3'
+services:
+  app:
+    build: ./
+    image: local/base-api:dev
+    pull_policy: never
+    volumes:
+      - .:/base-api
+    ports:
+      - "5007:5000"
+    environment:
+      FLASK_APP: main.py
+      DB_ADDR: postgres
+      DB_NAME: database
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command: flask run --host=0.0.0.0 --debug
+    stop_signal: SIGINT
+    tty: true
+    stdin_open: true
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:14-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: database
+    ports:
+      - "5437:5432"

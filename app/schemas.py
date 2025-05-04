@@ -7,6 +7,8 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
         model = User
         include_fk = True
 
+    password = ma.String(load_only=True)
+
 
 class CompanySchema(ma.SQLAlchemyAutoSchema):
     class Meta:
